@@ -22,7 +22,7 @@ async function run() {
         await client.connect();
         const servicesCollection = client.db('carServices').collection('users');
 
-        // find all services (find multiple documents)
+        // FIND all services (find multiple documents)
         app.get('/services', async (req, res) => {
             const query = {};
             const cursor = servicesCollection.find(query);
@@ -30,12 +30,19 @@ async function run() {
             res.send(services);
         })
 
-        // set dynamic params (find one documents)
+        // SET dynamic params (find one documents)
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const services = await servicesCollection.findOne(query);
             res.send(services);
+        })
+
+        // POST (insert one documents)
+        app.post('/services', async (req, res) => {
+            const newUser = req.body;
+            const result = await servicesCollection.insertOne(newUser);
+            res.send(result);
         })
 
 
